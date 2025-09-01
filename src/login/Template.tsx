@@ -23,7 +23,8 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
         i18n,
         doUseDefaultCss,
         classes,
-        children
+        children,
+        showBackToLogin = false
     } = props;
 
     const { kcClsx } = getKcClsx({ doUseDefaultCss, classes });
@@ -279,6 +280,15 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                 <div className={"flex justify-around"}></div>
             </div>
             <footer className={"flex justify-between max-w-md w-full mt-8 relative"}>
+                {showBackToLogin && (
+                    <div className={kcClsx("kcFormOptionsWrapperClass")}>
+                        <span>
+                            <a className={"no-underline hover:no-underline text-secondary-600 text-sm"} href={url.loginUrl}>
+                                {msg("backToLogin")}
+                            </a>
+                        </span>
+                    </div>
+                )}
                 <section className={"flex flex-col ml-5"}>
                     {(footerImprintUrl || kcContext.properties["TAILCLOAKIFY_FOOTER_IMPRINT_URL"]) && (
                         <a

@@ -281,7 +281,7 @@ function InputTag(props: InputFieldByTypeProps & { fieldIndex: number | undefine
 
     const { advancedMsgStr } = i18n;
 
-    attribute.annotations.inputTypePlaceholder = advancedMsgStr(attribute.displayName ?? "") + " *";
+    attribute.annotations.inputTypePlaceholder = advancedMsgStr(attribute.displayName ?? "");
 
     return (
         <>

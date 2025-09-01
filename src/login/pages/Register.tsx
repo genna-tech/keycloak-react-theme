@@ -57,6 +57,7 @@ export default function Register(props: RegisterProps) {
             headerNode={messageHeader !== undefined ? advancedMsg(messageHeader) : msg("registerTitle")}
             displayMessage={messagesPerField.exists("global")}
             displayRequiredFields={true}
+            showBackToLogin={true}
             socialProvidersNode={
                 <>
                     {showSocialProvidersOnRegister && social?.providers?.length && (
@@ -170,19 +171,6 @@ export default function Register(props: RegisterProps) {
                     )}
                 </div>
             </form>
-            <div className={"text-left mt-5"}>
-                <span>
-                    <span className="required: text-secondary-600 text-sm">* </span>
-                    {msg("requiredFields")}
-                </span>
-            </div>
-            <div className={"text-center"}>
-                <span>
-                    <a className={"no-underline hover:no-underline text-secondary-600 text-sm"} href={url.loginUrl}>
-                        {msg("backToLogin")}
-                    </a>
-                </span>
-            </div>
         </Template>
     );
 }
@@ -199,15 +187,9 @@ function TermsAcceptance(props: {
     const { msg } = i18n;
 
     return (
-        <>
-            <div className="form-group">
-                <div className={kcClsx("kcInputWrapperClass")}>
-                    {msg("termsTitle")}
-                    <div id="kc-registration-terms-text">{msg("termsText")}</div>
-                </div>
-            </div>
-            <div className="form-group">
-                <div className={kcClsx("kcLabelWrapperClass")}>
+        <div className="form-group">
+            <div className={kcClsx("kcLabelWrapperClass")}>
+                <label id="kc-registration-terms-text" htmlFor="termsAccepted" className="flex gap-2 font-normal">
                     <input
                         type="checkbox"
                         id="termsAccepted"
@@ -216,24 +198,22 @@ function TermsAcceptance(props: {
                         checked={areTermsAccepted}
                         onChange={e => onAreTermsAcceptedValueChange(e.target.checked)}
                         aria-invalid={messagesPerField.existsError("termsAccepted")}
-                    />{" "}
-                    <label htmlFor="termsAccepted" className={kcClsx("kcLabelClass")}>
-                        {msg("acceptTerms")}
-                    </label>
-                </div>
-                {messagesPerField.existsError("termsAccepted") && (
-                    <div className={kcClsx("kcLabelWrapperClass")}>
-                        <span
-                            id="input-error-terms-accepted"
-                            className={kcClsx("kcInputErrorMessageClass")}
-                            aria-live="polite"
-                            dangerouslySetInnerHTML={{
-                                __html: kcSanitize(messagesPerField.get("termsAccepted"))
-                            }}
-                        />
-                    </div>
-                )}
+                    />
+                    {msg("termsText")}
+                </label>
             </div>
-        </>
+            {messagesPerField.existsError("termsAccepted") && (
+                <div className={kcClsx("kcLabelWrapperClass")}>
+                    <span
+                        id="input-error-terms-accepted"
+                        className={kcClsx("kcInputErrorMessageClass")}
+                        aria-live="polite"
+                        dangerouslySetInnerHTML={{
+                            __html: kcSanitize(messagesPerField.get("termsAccepted"))
+                        }}
+                    />
+                </div>
+            )}
+        </div>
     );
 }

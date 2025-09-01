@@ -37,6 +37,7 @@ export default function LoginResetPassword(
             displayMessage={!messagesPerField.existsError("username")}
             infoNode={realm.duplicateEmailsAllowed ? msg("emailInstructionUsername") : msg("emailInstruction")}
             headerNode={msg("emailForgotTitle")}
+            showBackToLogin={true}
         >
             <form id="kc-reset-password-form" className={kcClsx("kcFormClass")} action={url.loginAction} method="post">
                 <div className={kcClsx("kcFormGroupClass")}>
@@ -82,16 +83,6 @@ export default function LoginResetPassword(
                     </div>
                 </div>
                 <div className={kcClsx("kcFormGroupClass", "kcFormSettingClass")}>
-                    <div id="kc-form-options" className={kcClsx("kcFormOptionsClass")}>
-                        <div className={kcClsx("kcFormOptionsWrapperClass")}>
-                            <span>
-                                <a className={"no-underline hover:no-underline text-secondary-600 text-sm"} href={url.loginUrl}>
-                                    {msg("backToLogin")}
-                                </a>
-                            </span>
-                        </div>
-                    </div>
-
                     <div id="kc-form-buttons" className={kcClsx("kcFormButtonsClass")}>
                         <input
                             className={clsx(

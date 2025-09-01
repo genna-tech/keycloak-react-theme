@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useReducer } from "react";
+import { Fragment, useEffect, useReducer, useState } from "react";
 import { assert } from "keycloakify/tools/assert";
 import type { KcClsx } from "keycloakify/login/lib/kcClsx";
 import {
@@ -12,6 +12,13 @@ import type { Attribute } from "keycloakify/login/KcContext";
 import type { KcContext } from "./KcContext";
 import type { I18n } from "./i18n";
 import { clsx } from "keycloakify/tools/clsx";
+
+type Country = "BR" | "US";
+
+const COUNTRY_DATA = {
+    BR: { code: "+55", pattern: "(##) #?####-####" },
+    US: { code: "+1", pattern: "(###) ###-####" }
+};
 
 export default function UserProfileFormFields(props: UserProfileFormFieldsProps<KcContext, I18n>) {
     const { kcContext, i18n, kcClsx, onIsFormSubmittableValueChange, doMakeUserConfirmPassword, BeforeField, AfterField } = props;
@@ -230,6 +237,10 @@ function InputFieldByType(props: InputFieldByTypeProps) {
                 );
             }
 
+            if (attribute.name === "phone") {
+                return <Phone {...props} fieldIndex={undefined} />;
+            }
+
             const inputNode = <InputTag {...props} fieldIndex={undefined} />;
 
             if (attribute.name === "password" || attribute.name === "password-confirm") {
@@ -243,6 +254,91 @@ function InputFieldByType(props: InputFieldByTypeProps) {
             return inputNode;
         }
     }
+}
+
+function Phone(props: InputFieldByTypeProps & { fieldIndex: number | undefined }) {
+    const { attribute, fieldIndex, kcClsx, dispatchFormAction, valueOrValues, i18n, displayableErrors } = props;
+    const { currentLanguage } = i18n;
+
+    const language = currentLanguage.languageTag;
+    const [country, setCountry] = useState<Country>(["pt", "pt-BR"].includes(language) ? "BR" : "US");
+    const { pattern, code } = COUNTRY_DATA[country];
+    const placeholder = pattern.replace(/\?/g, "").replace(/#/g, "0");
+    const minLength = pattern.replace(/#\?/g, "").length;
+    const maxLength = pattern.replace(/\?/g, "").length;
+    const value = valueOrValues as string;
+    const phone = value.split(/^\+\d+ /)[1];
+
+    function maskPhone(value: string) {
+        if (!value) return "";
+        const areaSize = pattern.match(/\((#+)\)/)?.[1].length;
+        const suffixSize = pattern.match(/#+$/)?.[0].length;
+        const maxDigits = pattern.replace(/[^#]/g, "").length;
+
+        const areaRegex = new RegExp("^(\\d{" + areaSize + "})(\\d)");
+        const suffixRegex = new RegExp("(\\d)(\\d{" + suffixSize + "})$");
+
+        value = value.replace(/\D/g, "").slice(0, maxDigits);
+        value = value.replace(areaRegex, "($1) $2");
+        value = value.replace(suffixRegex, "$1-$2");
+        return value;
+    }
+
+    return (
+        <div className="flex gap-2">
+            <input type="hidden" id={attribute.name} name={attribute.name} value={value} />
+
+            <select
+                id={`${attribute.name}.country`}
+                name={`${attribute.name}.country`}
+                className={clsx(
+                    kcClsx("kcInputClass"),
+                    "block w-auto focus:outline-none border-secondary-200 mt-1 rounded-md focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 text-sm"
+                )}
+                value={country}
+                onChange={e => setCountry(e.target.value as Country)}
+            >
+                <option value="BR">🇧🇷 BR</option>
+                <option value="US">🇺🇸 US</option>
+            </select>
+            <input
+                type={"text"}
+                id={`${attribute.name}.phone`}
+                name={`${attribute.name}.phone`}
+                value={phone}
+                className={clsx(
+                    kcClsx("kcInputClass"),
+                    "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 sm:text-sm"
+                )}
+                aria-invalid={displayableErrors.find(error => error.fieldIndex === fieldIndex) !== undefined}
+                disabled={attribute.readOnly}
+                autoComplete={attribute.autocomplete}
+                placeholder={placeholder}
+                pattern={attribute.annotations.inputTypePattern}
+                size={attribute.annotations.inputTypeSize === undefined ? undefined : parseInt(`${attribute.annotations.inputTypeSize}`)}
+                maxLength={maxLength}
+                minLength={minLength}
+                max={attribute.annotations.inputTypeMax}
+                min={attribute.annotations.inputTypeMin}
+                step={attribute.annotations.inputTypeStep}
+                {...Object.fromEntries(Object.entries(attribute.html5DataAnnotations ?? {}).map(([key, value]) => [`data-${key}`, value]))}
+                onChange={e =>
+                    dispatchFormAction({
+                        action: "update",
+                        name: attribute.name,
+                        valueOrValues: code + " " + maskPhone(e.target.value)
+                    })
+                }
+                onBlur={() =>
+                    dispatchFormAction({
+                        action: "focus lost",
+                        name: attribute.name,
+                        fieldIndex: fieldIndex
+                    })
+                }
+            />
+        </div>
+    );
 }
 
 function PasswordWrapper(props: { kcClsx: KcClsx; i18n: I18n; passwordInputId: string; children: JSX.Element }) {

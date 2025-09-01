@@ -37,7 +37,9 @@ export default defineConfig({
                 '<@addToXKeycloakifyMessagesIfMessageKey str="faviconUrl" />',
                 '<@addToXKeycloakifyMessagesIfMessageKey str="footerImprintUrl" />',
                 '<@addToXKeycloakifyMessagesIfMessageKey str="footerDataprotectionUrl" />',
-                '<@addToXKeycloakifyMessagesIfMessageKey str="showSocialProvidersOnRegister" />'
+                '<@addToXKeycloakifyMessagesIfMessageKey str="showSocialProvidersOnRegister" />',
+                '<@addToXKeycloakifyMessagesIfMessageKey str="registerTitle" />',
+                '<@addToXKeycloakifyMessagesIfMessageKey str="doRegister" />'
             ].join(".\n"),
             startKeycloakOptions: {
                 extensionJars: [

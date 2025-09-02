@@ -8,6 +8,7 @@ import { useInitialize } from "keycloakify/login/Template.useInitialize";
 import type { I18n } from "./i18n";
 import type { KcContext } from "./KcContext";
 import useSetCookieConsent from "./useSetCookieConsent.tsx";
+import { PostHog } from "./posthog.ts";
 
 export default function Template(props: TemplateProps<KcContext, I18n>) {
     const {
@@ -87,6 +88,13 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
             if (window.CookieConsent === undefined && kcContext.properties["TAILCLOAKIFY_FOOTER_ORESTBIDACOOKIECONSENT"])
                 useSetCookieConsent(kcContext, i18n);
         });
+
+        const posthog = new PostHog();
+        posthog.init({
+            host: kcContext.properties["POSTHOG_HOST"],
+            key: kcContext.properties["POSTHOG_KEY"]
+        });
+        if ("user" in kcContext) posthog.identify(kcContext.user);
     }, []);
 
     // Load CSS

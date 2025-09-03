@@ -326,7 +326,7 @@ function Phone(props: InputFieldByTypeProps & { fieldIndex: number | undefined }
                     dispatchFormAction({
                         action: "update",
                         name: attribute.name,
-                        valueOrValues: code + " " + maskPhone(e.target.value)
+                        valueOrValues: e.target.value && code + " " + maskPhone(e.target.value)
                     })
                 }
                 onBlur={() =>

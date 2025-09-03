@@ -111,3 +111,31 @@ html body {
 .pf-c-alert__title {
     font-weight: normal;
 }
+
+input[type="checkbox"],
+input[type="radio"] {
+    margin: 0;
+}
+
+.pf-c-form-control[aria-invalid="true"] {
+    background: none;
+}
+
+.login-pf-page .card-pf {
+    padding-top: 24px;
+}
+
+#kc-locale {
+    top: 0;
+}
+
+#kc-form-buttons {
+    margin: 0;
+}
+
+@layer base {
+    a,
+    .login-pf a {
+        @apply hover:text-primary-600 hover:no-underline hover:opacity-80;
+    }
+}

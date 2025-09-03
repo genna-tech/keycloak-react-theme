@@ -41,7 +41,9 @@ export default defineConfig({
                 '<@addToXKeycloakifyMessagesIfMessageKey str="footerDataprotectionUrl" />',
                 '<@addToXKeycloakifyMessagesIfMessageKey str="showSocialProvidersOnRegister" />',
                 '<@addToXKeycloakifyMessagesIfMessageKey str="registerTitle" />',
-                '<@addToXKeycloakifyMessagesIfMessageKey str="doRegister" />'
+                '<@addToXKeycloakifyMessagesIfMessageKey str="doRegister" />',
+                '<@addToXKeycloakifyMessagesIfMessageKey str="error-user-attribute-required" />',
+                '<@addToXKeycloakifyMessagesIfMessageKey str="error-pattern-no-match" />'
             ].join(".\n"),
             startKeycloakOptions: {
                 extensionJars: [

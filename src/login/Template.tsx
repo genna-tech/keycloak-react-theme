@@ -37,7 +37,9 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
     useEffect(() => {
         document.title = documentTitle ?? msgStr("loginTitle", kcContext.realm.displayName);
-        console.log({ enabledLanguages });
+
+        const languageHref = enabledLanguages.find(l => l.languageTag === currentLanguage.languageTag)?.href;
+        if (languageHref) fetch(languageHref);
     }, []);
 
     // Load Favicon
@@ -193,8 +195,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                     </video>
                 )}
             </div>
-
-            <div className={clsx(kcClsx("kcFormCardClass"), "relative z-10 max-w-md w-full rounded-lg")}>
+            <div className={clsx(kcClsx("kcFormCardClass"), "relative z-10 max-w-md w-full rounded-lg !pt-6")}>
                 {headerLogoUrl || kcContext.properties["TAILCLOAKIFY_HEADER_LOGO_URL"] ? (
                     <img alt={"Logo"} src={headerLogoUrl || kcContext.properties["TAILCLOAKIFY_HEADER_LOGO_URL"]} className={"mx-auto h-16 w-auto"} />
                 ) : (
@@ -203,7 +204,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                 <header className={clsx(kcClsx("kcFormHeaderClass"))}>
                     {(() => {
                         const node = !(auth !== undefined && auth.showUsername && !auth.showResetCredentials) ? (
-                            <h1 id="kc-page-title" className={"text-center text-xl"}>
+                            <h1 id="kc-page-title" className={"text-center !text-lg sm:!text-xl"}>
                                 {headerNode}
                             </h1>
                         ) : (
@@ -289,7 +290,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                 </div>
                 <div className={"flex justify-around"}></div>
             </div>
-            <footer className={"flex justify-between max-w-md w-full mt-8 relative"}>
+            <footer className={"flex justify-between max-w-md w-full mt-8 relative px-4"}>
                 {showBackToLogin && (
                     <div className={kcClsx("kcFormOptionsWrapperClass")}>
                         <span>

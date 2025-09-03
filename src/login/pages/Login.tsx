@@ -53,15 +53,25 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                 <>
                     {realm.password && social?.providers !== undefined && social.providers.length !== 0 && (
                         <div id="kc-social-providers" className={kcClsx("kcFormSocialAccountSectionClass")}>
-                            {kcContext.properties["TAILCLOAKIFY_HIDE_LOGIN_FORM"]?.toUpperCase() !== 'TRUE' ? (<>
-                                <hr />
-                                <h2 className={"pt-4 separate text-secondary-600 text-sm"}>{msg("identity-provider-login-label")}</h2>
-                            </>) : ('')}
+                            {kcContext.properties["TAILCLOAKIFY_HIDE_LOGIN_FORM"]?.toUpperCase() !== "TRUE" ? (
+                                <>
+                                    <hr />
+                                    <h2 className={"pt-4 separate text-secondary-600 text-sm"}>{msg("identity-provider-login-label")}</h2>
+                                </>
+                            ) : (
+                                ""
+                            )}
                             <ul
                                 className={clsx(
                                     kcClsx("kcFormSocialAccountListClass", social.providers.length > 3 && "kcFormSocialAccountListGridClass"),
                                     "gap-4 grid pt-4",
-                                    social.providers.length === 1 ? 'grid-cols-1' : social.providers.length % 3 === 0 && social.providers.length <= 6 ? 'grid-cols-3' : social.providers.length % 2 === 0 && social.providers.length <= 6 ? 'grid-cols-2' : 'grid-cols-4'
+                                    social.providers.length === 1
+                                        ? "grid-cols-1"
+                                        : social.providers.length % 3 === 0 && social.providers.length <= 6
+                                          ? "grid-cols-3"
+                                          : social.providers.length % 2 === 0 && social.providers.length <= 6
+                                            ? "grid-cols-2"
+                                            : "grid-cols-4"
                                 )}
                             >
                                 {social.providers.map((...[p, , providers]) => (
@@ -100,7 +110,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                 </>
             }
         >
-            {kcContext.properties["TAILCLOAKIFY_HIDE_LOGIN_FORM"]?.toUpperCase() !== 'TRUE' ? (
+            {kcContext.properties["TAILCLOAKIFY_HIDE_LOGIN_FORM"]?.toUpperCase() !== "TRUE" ? (
                 <div id="kc-form">
                     <div id="kc-form-wrapper" className={"space-y-4"}>
                         {realm.password && (
@@ -163,7 +173,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     </label>
                                     <PasswordWrapper kcClsx={kcClsx} i18n={i18n} passwordInputId="password">
                                         <input
-                                            placeholder="Password"
+                                            placeholder={msgStr("password")}
                                             tabIndex={3}
                                             id="password"
                                             className={clsx(

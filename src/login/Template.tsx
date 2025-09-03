@@ -9,6 +9,7 @@ import type { I18n } from "./i18n";
 import type { KcContext } from "./KcContext";
 import useSetCookieConsent from "./useSetCookieConsent.tsx";
 import { PostHog } from "./posthog.ts";
+import { LanguageTag } from "keycloakify/login/i18n/messages_defaultSet/types";
 
 export default function Template(props: TemplateProps<KcContext, I18n>) {
     const {
@@ -36,6 +37,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
     useEffect(() => {
         document.title = documentTitle ?? msgStr("loginTitle", kcContext.realm.displayName);
+        console.log({ enabledLanguages });
     }, []);
 
     // Load Favicon
@@ -344,7 +346,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                                         aria-expanded="false"
                                         aria-controls="language-switch1"
                                     >
-                                        {currentLanguage.label}
+                                        {languageMap[currentLanguage.languageTag]?.[currentLanguage.languageTag] ?? currentLanguage.label}
                                     </button>
                                     <ul
                                         role="menu"
@@ -357,7 +359,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                                         {enabledLanguages.map(({ languageTag, label, href }, i) => (
                                             <li key={languageTag} className={kcClsx("kcLocaleListItemClass")} role="none">
                                                 <a role="menuitem" id={`language-${i + 1}`} className={kcClsx("kcLocaleItemClass")} href={href}>
-                                                    {label}
+                                                    {languageMap[currentLanguage.languageTag]?.[languageTag] ?? label}
                                                 </a>
                                             </li>
                                         ))}
@@ -371,3 +373,13 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
         </div>
     );
 }
+
+const languageMap: Partial<Record<LanguageTag, Partial<Record<LanguageTag, string>>>> = {
+    en: {
+        "pt-BR": "Portuguese (Brazil)"
+    },
+    "pt-BR": {
+        en: "Inglês",
+        "pt-BR": "Português (Brasil)"
+    }
+};

@@ -49,7 +49,7 @@ export default function LoginPassword(props: PageProps<Extract<KcContext, { page
 
                             <PasswordWrapper kcClsx={kcClsx} i18n={i18n} passwordInputId="password">
                                 <input
-                                    placeholder={"Password"}
+                                    placeholder={msgStr("password")}
                                     tabIndex={2}
                                     id="password"
                                     className={clsx(
@@ -84,7 +84,8 @@ export default function LoginPassword(props: PageProps<Extract<KcContext, { page
                                             tabIndex={5}
                                             href={url.loginResetCredentialsUrl}
                                             className={"text-primary-600 hover:text-primary-500 inline-flex no-underline hover:no-underline"}
-                                        ><br/>
+                                        >
+                                            <br />
                                             {msg("doForgotPassword")}
                                         </a>
                                     </span>

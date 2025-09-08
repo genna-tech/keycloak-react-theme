@@ -35,7 +35,7 @@ export default function Register(props: RegisterProps) {
         social
     } = kcContext;
 
-    const { msg, msgStr, advancedMsg, advancedMsgStr } = i18n;
+    const { msg, msgStr, advancedMsg, advancedMsgStr, currentLanguage, enabledLanguages } = i18n;
 
     const [isFormSubmittable, setIsFormSubmittable] = useState(false);
     const [areTermsAccepted, setAreTermsAccepted] = useState(false);
@@ -48,6 +48,11 @@ export default function Register(props: RegisterProps) {
                 ? advancedMsgStr("showSocialProvidersOnRegister")
                 : null) || kcContext.properties.TAILCLOAKIFY_SHOW_SOCIAL_PROVIDERS_ON_REGISTER
         ).toUpperCase() === "TRUE";
+
+    useEffect(() => {
+        const languageHref = enabledLanguages.find(l => l.languageTag === currentLanguage.languageTag)?.href;
+        if (languageHref) fetch(languageHref);
+    }, []);
 
     return (
         <Template

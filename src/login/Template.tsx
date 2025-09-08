@@ -37,9 +37,6 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
     useEffect(() => {
         document.title = documentTitle ?? msgStr("loginTitle", kcContext.realm.displayName);
-
-        const languageHref = enabledLanguages.find(l => l.languageTag === currentLanguage.languageTag)?.href;
-        if (languageHref) fetch(languageHref);
     }, []);
 
     // Load Favicon

@@ -9,6 +9,7 @@ import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import useProviderLogos from "../useProviderLogos";
 import { createPortal } from "react-dom";
+import { useUpdateLocale } from "../useUpdateLocale";
 
 type RegisterProps = PageProps<Extract<KcContext, { pageId: "register.ftl" }>, I18n> & {
     UserProfileFormFields: LazyOrNot<(props: UserProfileFormFieldsProps) => JSX.Element>;
@@ -17,6 +18,8 @@ type RegisterProps = PageProps<Extract<KcContext, { pageId: "register.ftl" }>, I
 
 export default function Register(props: RegisterProps) {
     const { kcContext, i18n, doUseDefaultCss, Template, classes, UserProfileFormFields, doMakeUserConfirmPassword } = props;
+
+    useUpdateLocale(i18n);
 
     const { kcClsx } = getKcClsx({
         doUseDefaultCss,
@@ -35,7 +38,7 @@ export default function Register(props: RegisterProps) {
         social
     } = kcContext;
 
-    const { msg, msgStr, advancedMsg, advancedMsgStr, currentLanguage, enabledLanguages } = i18n;
+    const { msg, msgStr, advancedMsg, advancedMsgStr } = i18n;
 
     const [isFormSubmittable, setIsFormSubmittable] = useState(false);
     const [areTermsAccepted, setAreTermsAccepted] = useState(false);
@@ -48,11 +51,6 @@ export default function Register(props: RegisterProps) {
                 ? advancedMsgStr("showSocialProvidersOnRegister")
                 : null) || kcContext.properties.TAILCLOAKIFY_SHOW_SOCIAL_PROVIDERS_ON_REGISTER
         ).toUpperCase() === "TRUE";
-
-    useEffect(() => {
-        const languageHref = enabledLanguages.find(l => l.languageTag === currentLanguage.languageTag)?.href;
-        if (languageHref) fetch(languageHref);
-    }, []);
 
     return (
         <Template

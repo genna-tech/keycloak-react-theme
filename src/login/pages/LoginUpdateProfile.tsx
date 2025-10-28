@@ -6,6 +6,7 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { clsx } from "keycloakify/tools/clsx";
+import { useUpdateLocale } from "../useUpdateLocale";
 
 type LoginUpdateProfileProps = PageProps<Extract<KcContext, { pageId: "login-update-profile.ftl" }>, I18n> & {
     UserProfileFormFields: LazyOrNot<(props: UserProfileFormFieldsProps) => JSX.Element>;
@@ -14,6 +15,8 @@ type LoginUpdateProfileProps = PageProps<Extract<KcContext, { pageId: "login-upd
 
 export default function LoginUpdateProfile(props: LoginUpdateProfileProps) {
     const { kcContext, i18n, doUseDefaultCss, Template, classes, UserProfileFormFields, doMakeUserConfirmPassword } = props;
+
+    useUpdateLocale(i18n);
 
     const { kcClsx } = getKcClsx({
         doUseDefaultCss,

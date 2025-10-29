@@ -58,6 +58,7 @@ const ViewEmailContinuation = lazy(
     () => import("./pages/p2-inc/keycloak-magic-link/ViewEmailContinuation")
 );
 const Invitations = lazy(() => import("./pages/p2-inc/keycloak-orgs/Invitations"));
+const IdpReviewUserProfile = lazy(() => import("./pages/IdpReviewUserProfile"));
 
 export default function KcPage(props: { kcContext: KcContext }) {
     const { kcContext } = props;
@@ -74,6 +75,16 @@ export default function KcPage(props: { kcContext: KcContext }) {
                                 {...{ kcContext, i18n, classes }}
                                 Template={Template}
                                 doUseDefaultCss={true}
+                            />
+                        );
+                    case "idp-review-user-profile.ftl":
+                        return (
+                            <IdpReviewUserProfile
+                                {...{ kcContext, i18n, classes }}
+                                Template={Template}
+                                doUseDefaultCss={true}
+                                UserProfileFormFields={UserProfileFormFields}
+                                doMakeUserConfirmPassword={doMakeUserConfirmPassword}
                             />
                         );
                     case "login.ftl":
